@@ -39,6 +39,22 @@ services:
   # agent:
   #   build: .
   #   ...
+  agent:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on: 
+      - redis
+    environment:
+      AGENT_API_KEY: ${AGENT_API_KEY}
+      REDIS_URL: redis://redis:6379/0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+
+
 
 volumes:
   redis-data:
